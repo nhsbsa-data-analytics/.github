@@ -4,7 +4,7 @@
 
 title = "Additional gitleaks config"
 [extend]
-path = "gitleaks-nhsbsa.toml"
+path = ".github-config/gitleaks-nhsbsa.toml"
 
 # =================================================================
 # Rule for detecting National Health Service (NHS) numbers
