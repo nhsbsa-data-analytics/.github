@@ -1,6 +1,5 @@
 name: 'Org-Wide Gitleaks Scan'
 
-# This is the special trigger that allows the workflow to be called by other repos.
 on:
   workflow_call:
     secrets:
@@ -13,6 +12,8 @@ jobs:
     name: gitleaks
     runs-on: ubuntu-latest
     steps:
+      # Step 1: Check out the code of the repository that CALLED the workflow.
+      # This is the code we want to scan. It will be at the root of the workspace.
       - name: Checkout Caller Repository Code
         uses: actions/checkout@v4
         with:
@@ -20,10 +21,19 @@ jobs:
           ref: ${{ github.ref }}
           fetch-depth: 0
 
+      # Step 2: NEW! Check out this repository (the .github repo) into a sub-folder.
+      # This is so we can access the centralized gitleaks.toml config file.
+      - name: Checkout Config Repository
+        uses: actions/checkout@v4
+        with:
+          repository: nhsbsa-data-analytics/.github # Explicitly name this repo
+          path: ./.github-config # Checkout into a specific folder
+
+      # Step 3: Run the scan, now with the correct path to the config file.
       - name: Run Gitleaks Scan
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE_PASSED }}
-          GITLEAKS_CONFIG: "gitleaks.toml"
-          
+          # UPDATED: Point to the config file inside the folder from Step 2
+          GITLEAKS_CONFIG: ".github-config/gitleaks.toml"
