@@ -25,5 +25,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE_PASSED }}
-          GITLEAKS_CONFIG: ".github/gitleaks.toml"
+          GITLEAKS_CONFIG: "gitleaks.toml"
           
