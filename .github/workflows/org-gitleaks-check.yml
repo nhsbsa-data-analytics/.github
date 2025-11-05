@@ -1,0 +1,24 @@
+name: 'Org-Wide Gitleaks Scan'
+
+# This is the special trigger that allows the workflow to be called by other repos.
+on:
+  workflow_call:
+
+jobs:
+  scan:
+    name: Gitleaks Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          # We need to fetch the full history for gitleaks to scan everything
+          fetch-depth: 0
+
+      - name: Run Gitleaks Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          # This is crucial. It securely injects the Gitleaks license key
+          # from the organization-level secrets of the REPOSITORY aCTION IS RUNNING IN.
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+          
