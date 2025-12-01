@@ -8,11 +8,13 @@ This guide is intended as a 'how-to' for aligning with the [guidance in the DDaT
 
 ### AVD environment
 
-1. Create a new `conda` environment with the `pre-commit` package. Can name it whatever you like, I use `dev`.
+1. (Once only) Create a new `conda` environment with the `pre-commit` package. Can name it whatever you like, I use `dev`.
 
 ```bash
 conda create -n dev -c conda-forge python=3.11 pre-commit
 ```
+
+The following steps should be repeated on _all_ repos.
 
 2. Activate the new environment.
 
@@ -43,6 +45,55 @@ then turn it back on with
 
 ```bash
 pre-commit install
+```
+
+An alternative method is to get steps 2-4 to be done automatically, whenever you create or clone a new repo.
+
+1. Ensure you are in the environment with the `pre-commit` package available.
+
+```bash
+conda activate dev
+```
+
+2. Create a template git repo.
+
+```bash
+git config --global init.templateDir ~/.git-template
+```
+
+3. Install `pre-commit` in the template repo
+
+```bash
+pre-commit init-templatedir ~/.git-template
+```
+
+Note that this will not apply to existing repos, only new ones created by either `git init` or `git clone`. However, you can easily copy the hook from the template repo (make sure you are in your repo first).
+
+```bash
+cp ~/.git-template/hooks/pre-commit .git/hooks/pre-commit
+```
+
+The result of the above will be that pre-commit will run if there is a `pre-commit-config.yaml` file in the repo. If there is not, then it will silently allow commits. If you want to ensure you do not forget to add the config, add a warning.
+
+1. Open the template repo hook.
+
+```bash
+code ~/.git-template/hooks/pre-commit
+```
+
+2. Add the following directly after the `#!/usr/bin/env bash`. You can leave the `exit 0` if you prefer to allow commits when there is no config file by default, or use `exit 1` to prevent them by default.
+
+```bash
+# --- START CUSTOM WARNING ---
+if [ ! -f .pre-commit-config.yaml ]; then
+    # Bold Red text for visibility on Light and Dark themes
+    echo -e "\033[1;31m[WARNING] No .pre-commit-config.yaml found in this repository.\033[0m"
+    echo -e "\033[1;31m          Pre-commit checks are NOT active.\033[0m"
+    
+    # Exit successfully (0) so the commit proceeds, or fail (1) if you want to block it
+    exit 0
+fi
+# --- END CUSTOM WARNING ---
 ```
 
 
