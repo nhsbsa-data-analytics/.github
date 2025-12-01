@@ -3,7 +3,7 @@
 # --- Configuration ---
 ORG_NAME="nhsbsa-data-analytics"
 SECRET_NAME="GITLEAKS_LICENSE"
-OUTPUT_FILE="repos_gitleaks_status.csv"
+OUTPUT_FILE="outputs/repos_gitleaks_status.csv"
 
 # --- Script ---
 
