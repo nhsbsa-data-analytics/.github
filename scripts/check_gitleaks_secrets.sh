@@ -14,7 +14,6 @@ echo "repo_name,visibility,has_gitleaks_workflow,has_gitleaks_secret" > "$OUTPUT
 
 # Get all repositories with name and visibility.
 # We format the output as "name|visibility" to easily split it later.
-# We limit to 4000 to catch everything.
 REPO_DATA=$(gh repo list "$ORG_NAME" --limit 4000 --source --json name,visibility --jq '.[] | "\(.name)|\(.visibility)"')
 
 if [ -z "$REPO_DATA" ]; then
@@ -35,7 +34,7 @@ while IFS="|" read -r REPO_NAME VISIBILITY; do
     
     # Progress indicator
     # \r = Move to start of line
-    # \033[K = Clear to end of line (Removes the "ghost" text)
+    # \033[K = Clear to end of line
     printf "\r\033[K[%d/%d] Checking %s..." "$CURRENT_COUNT" "$TOTAL_REPOS" "$REPO_NAME"
 
     # 1. Check for files containing "gitleaks" in .github/workflows

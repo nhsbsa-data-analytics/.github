@@ -15,7 +15,6 @@ echo "Fetching repository list for organization: $ORG_NAME..."
 
 # Get all repositories with name and visibility.
 # --source ensures we don't try to set secrets on forks.
-# --limit 4000 ensures we get everything.
 REPO_DATA=$(gh repo list "$ORG_NAME" --limit 4000 --source --json name,visibility --jq '.[] | "\(.name)|\(.visibility)"')
 
 if [ -z "$REPO_DATA" ]; then
@@ -76,4 +75,3 @@ echo "Total Repos Scanned: $TOTAL_REPOS"
 echo "Secrets Set:         $UPDATED_COUNT"
 echo "Skipped (Public):    $SKIPPED_PUBLIC_COUNT"
 echo "Skipped (Exists):    $SKIPPED_EXISTING_COUNT"
-
