@@ -7,8 +7,8 @@ repos:
       entry: >
         bash -c '
         mkdir -p .github-config &&
-        curl -f -s https://raw.githubusercontent.com/nhsbsa-data-analytics/.github/main/gitleaks.toml -o .github-config/gitleaks.toml &&
-        curl -f -s https://raw.githubusercontent.com/nhsbsa-data-analytics/.github/main/gitleaks-nhsbsa.toml -o .github-config/gitleaks-nhsbsa.toml &&
+        curl -f -s https://raw.githubusercontent.com/nhsbsa-data-analytics/.github/main/gitleaks/gitleaks.toml -o .github-config/gitleaks.toml &&
+        curl -f -s https://raw.githubusercontent.com/nhsbsa-data-analytics/.github/main/gitleaks/gitleaks-nhsbsa.toml -o .github-config/gitleaks-nhsbsa.toml &&
         gitleaks protect --config=".github-config/gitleaks.toml" --verbose --redact --staged;
         EXIT_CODE=$?;
         rm -rf .github-config;

@@ -36,4 +36,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE_PASSED }}
           # UPDATED: Point to the config file inside the folder from Step 2
-          GITLEAKS_CONFIG: ".github-config/gitleaks.toml"
+          GITLEAKS_CONFIG: ".github-config/gitleaks/gitleaks.toml"
