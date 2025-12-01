@@ -1,0 +1,11 @@
+b546cbaf5b7526dae0a2cfaf772000748f81e7b0:test/gitleaks_tests:nhs-number:4
+b546cbaf5b7526dae0a2cfaf772000748f81e7b0:test/gitleaks_tests:nhs-number:8
+b546cbaf5b7526dae0a2cfaf772000748f81e7b0:test/gitleaks_tests:nhs-number:10
+b546cbaf5b7526dae0a2cfaf772000748f81e7b0:test/gitleaks_tests:nhs-number:12
+b546cbaf5b7526dae0a2cfaf772000748f81e7b0:test/gitleaks_tests:nhs-number:14
+
+b546cbaf5b7526dae0a2cfaf772000748f81e7b0:docs/pre-commit-gitleaks.md:nhs-number:120
+b546cbaf5b7526dae0a2cfaf772000748f81e7b0:docs/pre-commit-gitleaks.md:database-connection-strings:124
+b546cbaf5b7526dae0a2cfaf772000748f81e7b0:docs/pre-commit-gitleaks.md:database-connection-strings:125
+b546cbaf5b7526dae0a2cfaf772000748f81e7b0:docs/pre-commit-gitleaks.md:database-connection-strings:156
+b546cbaf5b7526dae0a2cfaf772000748f81e7b0:docs/pre-commit-gitleaks.md:database-connection-strings:165
