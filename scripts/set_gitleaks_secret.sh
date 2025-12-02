@@ -7,7 +7,7 @@ SECRET_NAME="GITLEAKS_LICENSE"
 # --- Safety Check ---
 if [ -z "$GITLEAKS_LICENSE_VALUE" ]; then
     echo "Error: GITLEAKS_LICENSE_VALUE environment variable is not set."
-    echo "Usage: GITLEAKS_LICENSE_VALUE=\"your-key\" ./set_gitleaks_secrets.sh"
+    echo "Usage: GITLEAKS_LICENSE_VALUE=\"your-key\" ./set_gitleaks_secret.sh"
     exit 1
 fi
 

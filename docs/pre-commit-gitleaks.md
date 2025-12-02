@@ -251,7 +251,7 @@ Detect hardcoded secrets.............................(no files to check)Skipped
 [gitleaks-update 277fab8] Empty commit
 ```
 
-### Allowing false positives below
+### Allowing false positives
 
 It is possible that your code includes something that matches a `gitleaks` rule, but is not a leaked secret. These can be selectively allowed. You can use the `#gitleaks:allow` comment on the line.
 
@@ -259,6 +259,32 @@ It is possible that your code includes something that matches a `gitleaks` rule,
 fake_nhs_number = 1234567890  #gitleaks:allow
 ```
 
-An [alternative, but experimental, method](https://github.com/gitleaks/gitleaks?tab=readme-ov-file#gitleaksignore) is to use a `.gitleaksignore` file and add the Fingerprint from the `gitleaks` detection output (e.g. `gitleaks_tests:nhs-number:4`, given as the Fingerprint for the first secret detected in the fail scenario above).
+An [alternative, but experimental, method](https://github.com/gitleaks/gitleaks?tab=readme-ov-file#gitleaksignore) is to use a `.gitleaksignore` file and add the Fingerprint from the `gitleaks` detection output.
 
-The allow comment is the better method if you have one or a few isolated cases. But if you had something like a lot of fake data for tests, then the ignore file may be better.
+These methods are best used for different cases. When introducing secrets detection with gitleaks, you should do a full history scan on existing commits (i.e. the full code base).
+
+Add `gitleaks.json` and `.github-config/` to the `.gitignore` file to prevent accidentally committing it. The commands below (can copy and paste all in one go) will temporarily copy the centralised TOML files and run the full scan.
+
+```bash
+mkdir -p .github-config/gitleaks
+curl -f -s https://raw.githubusercontent.com/nhsbsa-data-analytics/.github/main/gitleaks/gitleaks.toml -o .github-config/gitleaks/gitleaks.toml
+curl -f -s https://raw.githubusercontent.com/nhsbsa-data-analytics/.github/main/gitleaks/gitleaks-nhsbsa.toml -o .github-config/gitleaks/gitleaks-nhsbsa.toml
+gitleaks detect --config .github-config/gitleaks/gitleaks.toml --report-path leak-report.json
+rm -rf .github-config
+```
+
+Any detections will be output in `gitleaks.json`. False positives in the results can be ignored by adding their fingerprint to a `.gitleaksignore` file, like
+
+```
+b546cbaf5b7526dae0a2cfaf772000748f81e7b0:test/gitleaks_tests:nhs-number:4
+b546cbaf5b7526dae0a2cfaf772000748f81e7b0:test/gitleaks_tests:nhs-number:8
+```
+
+__If you detect a secret, you must immediately follow the remediation plan from your risk assessment and take steps to remove the secret from wherever they are used. Additionally, where possible, a new rule should be added to the `gitleaks` TOML file.__
+
+However, using the ignore file method is brittle, as it references specific lines of code. For this reason it is best to use only for _existing_ code, when `gitleaks` is introduced in a repo. For any _new_ code, after you do the initial history scan, use allow comments as these will move with the code when it moves.
+
+Rule of thumb:
+
+- for existing code (before gitleaks) with a `.gitleaksignore`
+- new code (after gitleaks) with `#gitleaks:allow`
