@@ -13,7 +13,7 @@ This repo is a central place to store organisation wide files such as callable w
     - This file appears both in `.github/workflows` and `repo_files/.github/workflows`, as this repo itself uses it; the `repo_files` folder is designed so that it's content can be copied straight into another repo.
 - `.gitleaksignore` contains fingerprints of false positives found by `gitleaks`, which are ignored
 - A `pre-commit` hook to run `gitleaks` locally whenever a commit is attempted, [`.pre-commit-config.yaml`](.pre-commit-config.yaml).
-    - This file appears both in this repos root and in `repo_files`, as this repo itself uses it; the `repo_files` folder is designed so that it's content can be copied straight into another repo.
+    - This file appears both in this repo's root and in `repo_files`, as this repo itself uses it; the `repo_files` folder is designed so that it's content can be copied straight into another repo.
 - A guide, [Setting up a `pre-commit hook` to run `gitleaks`](docs/pre-commit-gitleaks.md).
 - A `gitleaks` folder, containing rules definitions:
     - [`gitleaks-nhsbsa.toml`](gitleaks/gitleaks-nhsbsa.toml) - standard NHSBSA rules file
@@ -36,11 +36,11 @@ The contents of this folder are designed to be copied into all repos within the 
 - A workflow, ([`gitleaks.yml`](repo_files/.github/workflows/gitleaks.yml), that calls ([`org-gitleaks-check.yml`](.github/workflows/org-gitleaks-check.yml), to be used in all organisation repos.
 - A `pre-commit` hook to run `gitleaks` locally whenever a commit is attempted, [`.pre-commit-config.yaml`](repo_files/.pre-commit-config.yaml).
 - Standard NHSBSA repo documentation.
-    - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
-    - [CONTRIBUTING.md](CONTRIBUTING.md)
-    - [LICENSE.md](LICENSE.md)
-    - [SECRETS.md](SECRETS.md)
-    - [SECURITY.md](SECURITY.md)
+    - [CODE_OF_CONDUCT.md](repo_files/CODE_OF_CONDUCT.md)
+    - [CONTRIBUTING.md](repo_files/CONTRIBUTING.md)
+    - [LICENSE.md](repo_files/LICENSE.md)
+    - [SECRETS.md](repo_files/SECRETS.md)
+    - [SECURITY.md](repo_files/SECURITY.md)
     - Note that there is no standard `README.md` included, as different repos will need different `README`s
 
 ## Contributions

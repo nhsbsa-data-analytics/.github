@@ -1,4 +1,4 @@
-# Setting up a `pre-commit` hook to run gitleaks
+# Setting up a `pre-commit` hook to run `gitleaks`
 
 Pre-commit hooks are scripts that execute before a code commit is finalised. Their purpose is to perform some action whenever a commit is made. This takes place before the actual commit is added, and depending on the hook result, may block the commit being made. Hooks can be set up to validate the code, check for formatting errors, ensure that tests pass, and perform various other checks you can define. Here we are just using it to run a `gitleaks` check on all files included in a commit.
 
@@ -22,7 +22,7 @@ The following steps should be repeated on _all_ repos.
 conda activate dev
 ```
 
-3. Make `pre-commit` active. This tells `git` to run any defined `pre-commit` hooks on every commit. The hooks will be defined in a YAML config, called `pre-commit-config.yaml`, which is placed in each `git` repo - see "Congifuration" below.
+3. Make `pre-commit` active. This tells `git` to run any defined `pre-commit` hooks on every commit. The hooks will be defined in a YAML config, called `pre-commit-config.yaml`, which is placed in each `git` repo - see [Configuration](#configuration).
 
 ```bash
 pre-commit install
@@ -81,7 +81,7 @@ The result of the above will be that pre-commit will run if there is a `pre-comm
 code ~/.git-template/hooks/pre-commit
 ```
 
-2. Add the following directly after the `#!/usr/bin/env bash`. You can leave the `exit 0` if you prefer to allow commits when there is no config file by default, or use `exit 1` to prevent them by default.
+2. Add the following directly after the `#!/usr/bin/env bash`. You can leave the `exit 0` if you prefer to allow commits when there is no config file by default, or replace with `exit 1` to prevent them by default.
 
 ```bash
 # --- START CUSTOM WARNING ---
@@ -104,13 +104,13 @@ Getting `pre-commit` installed on laptop is not as straightforward as on AVD.
 - MS Store python - The Microsoft Store version of python is what is installed on laptops. This is a poor version for development. The issue here seems to be the 256 character limit on file paths. The solution was to use `conda` to create a dedicated virtual environment with it's own python (just like done on the AVD).
 - Installing `conda` - Above issue lead to the need to install `conda` on my laptop. I tried several methods, but the one that finally worked was to install [`miniforge`](https://github.com/conda-forge/miniforge?tab=readme-ov-file#miniforge3). Unfortunately, without further setup that I did not feel like trying (as may not be possible as non-admin) this means using the command line interface that comes with `miniforge`. This is worse to use than git bash, but at least it works for this use case, and is not needed other than starting/stopping `pre-commit`.
 
-Once you have got some form of `conda` running, follow the same steps as as for AVD.
+Once you have got some form of `conda` running, follow the same [steps as as for AVD](#avd-environment).
 
 
 ## `gitleaks` installation
 
 1. Go to the [Gitleaks Releases Page](https://github.com/gitleaks/gitleaks/releases).
-2. Download the latest windows archive (e.g., gitleaks_8.30.0_windows_x64.zip) - you may need to click the 'Show all asses' link.
+2. Download the latest windows archive (e.g., gitleaks_8.30.0_windows_x64.zip) - you may need to click the 'Show all assets' link.
 3. Extract the zip.
 4. Place it in a folder of your choice (e.g., `C:\ProgramData`).
 5. Add the full path to your user `PATH` environment variable (e.g. `C:\ProgramData\gitleaks_8.30.0_windows_x64`). You can do this by searching for "env" in the Windows search and choosing the "Edit environment variables for your account" option, then finding and clicking "Edit" for the `PATH` variable.
@@ -143,16 +143,15 @@ repos:
 
 ```
 
-This can be copied from the `repo_files` folder of the organisation's [.github repo](https://github.com/nhsbsa-data-analytics/.github).
+This can be copied from the `repo_files` folder of this repo: [`.pre-commit-config.yaml`](repo_files/.pre-commit-config.yaml).
 
 This hook will initiate the following actions every time you run `git commit ...`:
 
 1. Create a temporary folder `.github-config`.
 2. Download the `gitleaks` definition files (TOMLs) from our `.github` repo.
 3. Run `gitleaks` using those definitions.
-4. Save the output of the run.
-5. Delete the temporary folder.
-6. Finally, output the `gitleaks` messages.
+4. Delete the temporary folder.
+5. Finally, output the `gitleaks` messages.
 
 If the hook passes, it means no secrets were detected and the commit is allowed. If the hook fails, it means some secrets were discovered - `gitleaks` will output details of the leaks and also prevent the commit from actually happening. Resolve accordingly before trying to commit again.
 
@@ -227,7 +226,9 @@ Fingerprint: gitleaks_tests:database-connection-strings:20
 12:34PM WRN leaks found: 3
 ```
 
-This gives you details of all potential leaks, so you can easily see why they were flagged and where they are in your code. For how to allow a false positive, see "Allowing fallse positives below".
+This gives you details of all potential leaks, so you can easily see why they were flagged and where they are in your code. For how to allow a false positive, see [Allowing false positives](#allowing-false-positives).
+
+__If you detect a secret, you must immediately follow the remediation plan from your risk assessment and take steps to remove the secret from wherever they are used. Additionally, where possible, a new rule should be added to the `gitleaks` TOML file.__
 
 ### Success scenario
 
@@ -261,9 +262,9 @@ fake_nhs_number = 1234567890  #gitleaks:allow
 
 An [alternative, but experimental, method](https://github.com/gitleaks/gitleaks?tab=readme-ov-file#gitleaksignore) is to use a `.gitleaksignore` file and add the Fingerprint from the `gitleaks` detection output.
 
-These methods are best used for different cases. When introducing secrets detection with gitleaks, you should do a full history scan on existing commits (i.e. the full code base).
+These methods are best used for different cases. When introducing secrets detection with `gitleaks`, you should do a full history scan on existing commits (i.e. the full code base).
 
-Add `gitleaks.json` and `.github-config/` to the `.gitignore` file to prevent accidentally committing it. The commands below (can copy and paste all in one go) will temporarily copy the centralised TOML files and run the full scan.
+Add `gitleaks.json` and `.github-config/` to the `.gitignore` file to prevent accidentally committing it. The commands below (can copy and paste all in one go and hit return on the final one) will temporarily copy the centralised TOML files and run the full scan.
 
 ```bash
 mkdir -p .github-config/gitleaks
